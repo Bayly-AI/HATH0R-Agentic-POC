@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="lib/assets/images/hathor-logo-1.png" alt="HATHOR logo" width="280" />
+</p>
+
 # HATHOR Agentic POC
 
 Integration **test bed** for the HATHOR OpenSource system.
