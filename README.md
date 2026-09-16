@@ -4,7 +4,8 @@
 
 # HATHOR Agentic POC
 
-Integration **test bed** for the HATHOR OpenSource system.
+Integration **test bed** for the HATHOR OpenSource system and the planned
+React/TypeScript **HATHOR Integration Console**.
 
 | Field | Value |
 |-------|-------|
@@ -12,13 +13,86 @@ Integration **test bed** for the HATHOR OpenSource system.
 | GitHub | [Bayly-AI/HATH0R-Agentic-POC](https://github.com/Bayly-AI/HATH0R-Agentic-POC) |
 | Canonical KB | `/Users/raybayly/Development/OpenSource/.hath0r/knowledgebase` |
 | Operator CLI | `hath0r` |
+| Control tower | `../HATH0R-CLI` |
+| Framework | `../hath0r` |
+
+## Purpose
+
+The POC will prove that a browser application can consume HATHOR
+capabilities without becoming a second control plane:
+
+1. a React/TypeScript UI presents health, product-catalog, and capability
+   status;
+2. a narrow TypeScript server adapter invokes an allowlist of read-only
+   `hath0r` commands;
+3. HATHOR CLI remains the boundary for control-tower and knowledge
+   orientation; and
+4. unavailable framework capabilities degrade visibly instead of being
+   simulated as successful.
+
+## Current status
+
+| Capability | Status |
+|------------|--------|
+| OpenSource group, control-tower, and KB pointers | Implemented |
+| `hath0r --version`, `hath0r doctor`, `hath0r kb path`, `hath0r kb products` | Implemented |
+| React/TypeScript application scaffold | Not yet implemented |
+| TypeScript CLI adapter and HTTP API | Not yet implemented |
+| Framework validation, orchestration, and governed mutation surfaces | Design-stage; not exposed by the current OpenSource CLI |
+
+The repository is documentation-first at this stage. There is no
+`package.json` yet, so frontend commands in the product docs are a target
+contract for the application-scaffolding ticket, not commands that work in
+the current checkout.
+
+## Verify the OpenSource control tower
+
+Install the sibling CLI in editable mode, then run its implemented
+diagnostics:
+
+```sh
+python3 -m pip install -e ../HATH0R-CLI
+hath0r --version
+hath0r doctor
+hath0r kb path
+hath0r kb products
+```
+
+## Documentation
+
+Start with [`docs/INDEX.md`](docs/INDEX.md).
+
+| Document | Purpose |
+|----------|---------|
+| [Product requirements](docs/hathor-req-001-integration-console-requirements-20260916.md) | POC scope, requirements, acceptance criteria, and capability status |
+| [Getting started](docs/hathor-guide-037-getting-started-20260916.md) | Current CLI orientation and future application setup |
+| [Architecture](docs/hathor-arch-003-integration-console-architecture-20260916.md) | Browser, TypeScript adapter, CLI, framework, and trust boundaries |
+| [CLI and framework integration](docs/hathor-guide-038-cli-framework-integration-20260916.md) | Implemented command contract and planned integration seams |
+| [Development and testing](docs/hathor-guide-039-development-testing-20260916.md) | Proposed frontend baseline, layout, scripts, and quality strategy |
+| [Security, governance, and delivery](docs/hathor-guide-040-security-governance-delivery-20260916.md) | Secrets, command safety, issue/branch rules, and promotion |
+| [Troubleshooting](docs/hathor-guide-041-troubleshooting-20260916.md) | Diagnostics for CLI, pointers, KB, app, and framework availability |
 
 ## Siblings
 
 - Framework: `../hath0r` — [HATH0R-Agentic-Framework](https://github.com/Bayly-AI/HATH0R-Agentic-Framework)
 - CLI: `../HATH0R-CLI` — [HATH0R-CLI](https://github.com/Bayly-AI/HATH0R-CLI)
 
-See `AGENTS.md` for group rules and CR-BAI-001 promotion path.
+The Framework sibling owns the canonical OpenSource documentation corpus.
+This repository owns product-specific POC documentation. The CLI sibling is
+the OpenSource control tower and implements the current `hath0r` command
+surface.
+
+## Governance
+
+- Use `.hath0r/` as the only framework metadata root.
+- Create a GitHub issue before a work branch.
+- Branch from `development`; feature work targets `development`.
+- Promote only through
+  `local → development → testing → staging → master (Production)`.
+- Never put credentials in source, docs, browser bundles, logs, fixtures, or
+  screenshots.
+
+See `AGENTS.md` for the complete project rules.
 
 ## License
 
