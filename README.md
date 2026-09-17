@@ -7,14 +7,14 @@
 Integration **test bed** for the HATHOR OpenSource system and the planned
 React/TypeScript **HATHOR Integration Console**.
 
-| Field | Value |
-|-------|-------|
-| Group | `hath0r-opensource` |
-| GitHub | [Bayly-AI/HATH0R-Agentic-POC](https://github.com/Bayly-AI/HATH0R-Agentic-POC) |
-| Canonical KB | `/Users/raybayly/Development/OpenSource/.hath0r/knowledgebase` |
-| Operator CLI | `hath0r` |
-| Control tower | `../HATH0R-CLI` |
-| Framework | `../hath0r` |
+| Field         | Value                                                                         |
+| ------------- | ----------------------------------------------------------------------------- |
+| Group         | `hath0r-opensource`                                                           |
+| GitHub        | [Bayly-AI/HATH0R-Agentic-POC](https://github.com/Bayly-AI/HATH0R-Agentic-POC) |
+| Canonical KB  | `/Users/raybayly/Development/OpenSource/.hath0r/knowledgebase`                |
+| Operator CLI  | `hath0r`                                                                      |
+| Control tower | `../HATH0R-CLI`                                                               |
+| Framework     | `../hath0r`                                                                   |
 
 ## Purpose
 
@@ -32,18 +32,30 @@ capabilities without becoming a second control plane:
 
 ## Current status
 
-| Capability | Status |
-|------------|--------|
-| OpenSource group, control-tower, and KB pointers | Implemented |
-| `hath0r --version`, `hath0r doctor`, `hath0r kb path`, `hath0r kb products` | Implemented |
-| React/TypeScript application scaffold | Not yet implemented |
-| TypeScript CLI adapter and HTTP API | Not yet implemented |
-| Framework validation, orchestration, and governed mutation surfaces | Design-stage; not exposed by the current OpenSource CLI |
+| Capability                                                                  | Status                                                  |
+| --------------------------------------------------------------------------- | ------------------------------------------------------- |
+| OpenSource group, control-tower, and KB pointers                            | Implemented                                             |
+| `hath0r --version`, `hath0r doctor`, `hath0r kb path`, `hath0r kb products` | Implemented                                             |
+| React/TypeScript application scaffold                                       | Implemented                                             |
+| TypeScript server adapter (`GET /api/health`)                               | Scaffolded (loopback Express)                           |
+| Full hath0r runner / status / products APIs                                 | Not yet implemented                                     |
+| Framework validation, orchestration, and governed mutation surfaces         | Design-stage; not exposed by the current OpenSource CLI |
 
-The repository is documentation-first at this stage. There is no
-`package.json` yet, so frontend commands in the product docs are a target
-contract for the application-scaffolding ticket, not commands that work in
-the current checkout.
+## Application quick start
+
+```sh
+npm install
+npm run dev          # Vite client :5173 + Express adapter on localhost:3001
+npm run check        # format, lint, typecheck, unit+integration tests, build
+```
+
+Scaffold decisions:
+
+- Package manager: **npm** (lockfile committed)
+- HTTP library: **Express** (local-only adapter)
+- Node.js: **>=18**
+- Vite proxies `/api/*` → `http://localhost:3001`
+- Product catalog YAML vs normalized JSON is deferred to the products API ticket
 
 ## Verify the OpenSource control tower
 
@@ -62,15 +74,15 @@ hath0r kb products
 
 Start with [`docs/INDEX.md`](docs/INDEX.md).
 
-| Document | Purpose |
-|----------|---------|
-| [Product requirements](docs/hathor-req-001-integration-console-requirements-20260916.md) | POC scope, requirements, acceptance criteria, and capability status |
-| [Getting started](docs/hathor-guide-037-getting-started-20260916.md) | Current CLI orientation and future application setup |
-| [Architecture](docs/hathor-arch-003-integration-console-architecture-20260916.md) | Browser, TypeScript adapter, CLI, framework, and trust boundaries |
-| [CLI and framework integration](docs/hathor-guide-038-cli-framework-integration-20260916.md) | Implemented command contract and planned integration seams |
-| [Development and testing](docs/hathor-guide-039-development-testing-20260916.md) | Proposed frontend baseline, layout, scripts, and quality strategy |
-| [Security, governance, and delivery](docs/hathor-guide-040-security-governance-delivery-20260916.md) | Secrets, command safety, issue/branch rules, and promotion |
-| [Troubleshooting](docs/hathor-guide-041-troubleshooting-20260916.md) | Diagnostics for CLI, pointers, KB, app, and framework availability |
+| Document                                                                                             | Purpose                                                             |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [Product requirements](docs/hathor-req-001-integration-console-requirements-20260916.md)             | POC scope, requirements, acceptance criteria, and capability status |
+| [Getting started](docs/hathor-guide-037-getting-started-20260916.md)                                 | Current CLI orientation and future application setup                |
+| [Architecture](docs/hathor-arch-003-integration-console-architecture-20260916.md)                    | Browser, TypeScript adapter, CLI, framework, and trust boundaries   |
+| [CLI and framework integration](docs/hathor-guide-038-cli-framework-integration-20260916.md)         | Implemented command contract and planned integration seams          |
+| [Development and testing](docs/hathor-guide-039-development-testing-20260916.md)                     | Proposed frontend baseline, layout, scripts, and quality strategy   |
+| [Security, governance, and delivery](docs/hathor-guide-040-security-governance-delivery-20260916.md) | Secrets, command safety, issue/branch rules, and promotion          |
+| [Troubleshooting](docs/hathor-guide-041-troubleshooting-20260916.md)                                 | Diagnostics for CLI, pointers, KB, app, and framework availability  |
 
 ## Siblings
 
