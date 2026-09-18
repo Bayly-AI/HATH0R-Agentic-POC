@@ -4,7 +4,13 @@
 
 # HATHOR Agentic POC
 
-Integration **test bed** for the HATHOR OpenSource system and the planned
+> **Archived milestone (2026-09-18).** Phase 3 (P1–P11) is complete on
+> `development`. See the
+> [completion & archive report](docs/hathor-report-001-poc-completion-archive-20260918.md)
+> (`HATHOR-REPORT-001`). The GitHub repository is archived read-only; un-archive
+> only to resume active product work under issue-first governance.
+
+Integration **test bed** for the HATHOR OpenSource system and the
 React/TypeScript **HATHOR Integration Console**.
 
 | Field         | Value                                                                         |
@@ -86,6 +92,7 @@ Start with [`docs/INDEX.md`](docs/INDEX.md).
 | [Development and testing](docs/hathor-guide-039-development-testing-20260916.md)                     | Proposed frontend baseline, layout, scripts, and quality strategy   |
 | [Security, governance, and delivery](docs/hathor-guide-040-security-governance-delivery-20260916.md) | Secrets, command safety, issue/branch rules, and promotion          |
 | [Troubleshooting](docs/hathor-guide-041-troubleshooting-20260916.md)                                 | Diagnostics for CLI, pointers, KB, app, and framework availability  |
+| [Completion & archive report](docs/hathor-report-001-poc-completion-archive-20260918.md)             | Phase 3 P1–P11 delivery summary and archive record                  |
 
 ## Siblings
 
