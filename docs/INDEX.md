@@ -56,6 +56,7 @@ available application commands.
 6. [Security, governance, and delivery](hathor-guide-040-security-governance-delivery-20260916.md) —
    safe execution and promotion rules.
 7. [Troubleshooting](hathor-guide-041-troubleshooting-20260916.md) — failure diagnosis.
+8. [Completion & archive report](hathor-report-001-poc-completion-archive-20260918.md) — Phase 3 delivery record.
 
 ## Documents
 
@@ -69,6 +70,7 @@ available application commands.
 | HATHOR-GUIDE-039 | how-to | draft | [Development and testing](hathor-guide-039-development-testing-20260916.md) |
 | HATHOR-GUIDE-040 | how-to | draft | [Security, governance, and delivery](hathor-guide-040-security-governance-delivery-20260916.md) |
 | HATHOR-GUIDE-041 | how-to | draft | [Troubleshooting](hathor-guide-041-troubleshooting-20260916.md) |
+| HATHOR-REPORT-001 | reference | complete | [Completion & archive report](hathor-report-001-poc-completion-archive-20260918.md) |
 
 ## Source-of-truth boundaries
 
