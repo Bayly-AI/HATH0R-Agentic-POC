@@ -1,5 +1,5 @@
 /**
- * HTTP routes for health and hathor capabilities (P5).
+ * HTTP routes for health, capabilities, and status (P5–P6).
  */
 
 import { Router, type Request, type Response } from "express";
@@ -12,6 +12,14 @@ import {
 } from "../../shared/contracts/index.js";
 import { resolveHathorExecutable, HathorSpawnError } from "../hathor/runner.js";
 import {
+  collectStatus,
+  flattenStatusDiagnostics,
+  statusExitClass,
+  type OperationRunner,
+  type StatusData,
+} from "../hathor/status.js";
+import type { RunnerOptions } from "../hathor/runner.js";
+import {
   buildAudit,
   createRequestContext,
   type RequestAudit,
@@ -23,6 +31,10 @@ export interface ApiDeps {
   adapterSupport?: AdapterSupport;
   /** Probe whether the hath0r binary is resolvable. */
   probeCliPresent?: () => boolean;
+  /** Injected CLI runner for status/products probes (tests). */
+  runOperation?: OperationRunner;
+  /** Default runner options (timeout, env, spawnImpl, …). */
+  runnerOptions?: RunnerOptions;
 }
 
 type Locals = {
@@ -32,7 +44,6 @@ type Locals = {
 function ctxOf(res: Response): RequestContext {
   const locals = res.locals as Locals;
   if (!locals.requestContext) {
-    // Fallback if middleware skipped (should not happen when wired).
     locals.requestContext = createRequestContext({ method: "GET", path: "", originalUrl: "" });
   }
   return locals.requestContext;
@@ -97,8 +108,6 @@ export function createApiRouter(deps: ApiDeps = {}): Router {
 
   /**
    * GET /api/hathor/capabilities — adapter capability document.
-   * Capability row states come from adapter support; missing CLI only affects
-   * envelope state / diagnostics (not optimistic "implemented" flips for framework rows).
    */
   router.get("/hathor/capabilities", (_req: Request, res: Response) => {
     const ctx = ctxOf(res);
@@ -116,7 +125,6 @@ export function createApiRouter(deps: ApiDeps = {}): Router {
           },
         ];
 
-    // Envelope state: ok when CLI present; degraded when adapter is ready but CLI missing.
     const state = cliPresent ? "ok" : "degraded";
 
     const envelope = makeEnvelope<CapabilityDocument & { cliPresent: boolean }>({
@@ -131,6 +139,48 @@ export function createApiRouter(deps: ApiDeps = {}): Router {
       commandKey: "capabilities",
       exitClass: cliPresent ? "success" : "spawn_error",
     });
+  });
+
+  /**
+   * GET /api/hathor/status — composite version + doctor + kb.path probes.
+   * HTTP 200 even when CLI is degraded/unavailable (envelope state carries truth).
+   */
+  router.get("/hathor/status", async (_req: Request, res: Response) => {
+    const ctx = ctxOf(res);
+    try {
+      const status: StatusData = await collectStatus({
+        runOperation: deps.runOperation,
+        runnerOptions: deps.runnerOptions,
+      });
+
+      const envelope = makeEnvelope<StatusData>({
+        requestId: ctx.requestId,
+        source: "live-cli",
+        state: status.overall,
+        data: status,
+        diagnostics: flattenStatusDiagnostics(status),
+      });
+
+      sendEnvelope(res, envelope, {
+        commandKey: "status",
+        exitClass: statusExitClass(status),
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      const envelope = makeEnvelope<null>({
+        requestId: ctx.requestId,
+        source: "application",
+        state: "error",
+        data: null,
+        diagnostics: [
+          {
+            code: "STATUS_INTERNAL_ERROR",
+            message: message || "Failed to collect status",
+          },
+        ],
+      });
+      sendEnvelope(res, envelope, { commandKey: "status", exitClass: "error" });
+    }
   });
 
   return router;
