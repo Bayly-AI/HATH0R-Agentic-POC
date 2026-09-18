@@ -36,9 +36,10 @@ capabilities without becoming a second control plane:
 | --------------------------------------------------------------------------- | ------------------------------------------------------- |
 | OpenSource group, control-tower, and KB pointers                            | Implemented                                             |
 | `hath0r --version`, `hath0r doctor`, `hath0r kb path`, `hath0r kb products` | Implemented                                             |
-| React/TypeScript application scaffold                                       | Implemented                                             |
-| TypeScript server adapter (`GET /api/health`)                               | Scaffolded (loopback Express)                           |
-| Full hath0r runner / status / products APIs                                 | Not yet implemented                                     |
+| React/TypeScript application + Status/Products/Diagnostics/About UI         | Implemented                                             |
+| TypeScript adapter APIs (health, capabilities, status, products)            | Implemented (loopback Express)                          |
+| Unit + integration + Playwright e2e + CI                                    | Implemented                                             |
+| Opt-in smoke against real `hath0r`                                          | Implemented (`npm run test:smoke`)                      |
 | Framework validation, orchestration, and governed mutation surfaces         | Design-stage; not exposed by the current OpenSource CLI |
 
 ## Application quick start
@@ -47,6 +48,8 @@ capabilities without becoming a second control plane:
 npm install
 npm run dev          # Vite client :5173 + Express adapter on localhost:3001
 npm run check        # format, lint, typecheck, unit+integration tests, build
+npm run test:e2e     # Playwright (starts local client+server)
+npm run test:smoke   # optional: real hath0r on PATH (not in CI)
 ```
 
 Scaffold decisions:
@@ -55,7 +58,7 @@ Scaffold decisions:
 - HTTP library: **Express** (local-only adapter)
 - Node.js: **>=18**
 - Vite proxies `/api/*` → `http://localhost:3001`
-- Product catalog YAML vs normalized JSON is deferred to the products API ticket
+- CLI golden fixtures under `test/fixtures/cli/` (and `test/fixtures/hathor-cli/`)
 
 ## Verify the OpenSource control tower
 
