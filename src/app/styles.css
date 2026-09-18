@@ -269,3 +269,95 @@ code {
   margin: 0.25rem 0 0.5rem;
   color: #ffe9a8;
 }
+
+.page-header {
+  margin-bottom: 1.25rem;
+}
+
+.page-header__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.panel-note {
+  margin-top: 0.75rem;
+}
+
+.table-wrap {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid #2a3441;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: #9db2ce;
+  font-weight: 600;
+}
+
+.code-block {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  background: #0f1419;
+  border: 1px solid #2a3441;
+  border-radius: 0.35rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+}
+
+.diag-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.diag-list__item {
+  border-top: 1px solid #2a3441;
+  padding-top: 0.75rem;
+}
+
+.diag-list__item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.diag-list__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.diag-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+}
+
+.about-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.about-list li {
+  margin-bottom: 0.5rem;
+}
