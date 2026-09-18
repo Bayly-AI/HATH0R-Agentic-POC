@@ -1,5 +1,5 @@
 /**
- * HTTP routes for health, capabilities, and status (P5–P6).
+ * HTTP routes for health, capabilities, status, and products (P5–P7).
  */
 
 import { Router, type Request, type Response } from "express";
@@ -11,6 +11,7 @@ import {
   type CapabilityDocument,
 } from "../../shared/contracts/index.js";
 import { resolveHathorExecutable, HathorSpawnError } from "../hathor/runner.js";
+import { collectProducts, productsExitClass, type ProductsResult } from "../hathor/products.js";
 import {
   collectStatus,
   flattenStatusDiagnostics,
@@ -180,6 +181,61 @@ export function createApiRouter(deps: ApiDeps = {}): Router {
         ],
       });
       sendEnvelope(res, envelope, { commandKey: "status", exitClass: "error" });
+    }
+  });
+
+  /**
+   * GET /api/hathor/products — suite catalog via kb.products only (never direct file I/O).
+   */
+  router.get("/hathor/products", async (_req: Request, res: Response) => {
+    const ctx = ctxOf(res);
+    try {
+      const products: ProductsResult = await collectProducts({
+        runOperation: deps.runOperation,
+        runnerOptions: deps.runnerOptions,
+      });
+
+      const envelope = makeEnvelope<ProductsResult["data"]>({
+        requestId: ctx.requestId,
+        source: "live-cli",
+        state: products.state,
+        data: products.data,
+        diagnostics: products.diagnostics,
+      });
+
+      // Include probe meta as additive audit-adjacent field for clients.
+      const bodyExtras = {
+        ...envelope,
+        probeMeta: products.meta,
+      };
+
+      const requestId = bodyExtras.requestId || ctx.requestId;
+      const withAudit = {
+        ...bodyExtras,
+        requestId,
+        audit: buildAudit(ctx, {
+          body: bodyExtras,
+          commandKey: "kb.products",
+          exitClass: productsExitClass(products),
+        }),
+      };
+      res.setHeader("X-Request-Id", requestId);
+      res.status(200).json(withAudit);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      const envelope = makeEnvelope<null>({
+        requestId: ctx.requestId,
+        source: "application",
+        state: "error",
+        data: null,
+        diagnostics: [
+          {
+            code: "PRODUCTS_INTERNAL_ERROR",
+            message: message || "Failed to collect products",
+          },
+        ],
+      });
+      sendEnvelope(res, envelope, { commandKey: "kb.products", exitClass: "error" });
     }
   });
 
