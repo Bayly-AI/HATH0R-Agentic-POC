@@ -69,3 +69,32 @@ export async function fetchHealth(
   const envelope = parseApiEnvelope(raw);
   return envelope as ApiEnvelope<{ status: string; service?: string }>;
 }
+
+export interface ProductRow {
+  product_id: string;
+  product_name?: string;
+  role?: string;
+  canonical?: boolean;
+  is_control_tower?: boolean;
+  [key: string]: unknown;
+}
+
+export type ProductsPayload =
+  | {
+      mediaType: "application/json";
+      group_id?: string;
+      control_tower_product_id?: string;
+      products: ProductRow[];
+    }
+  | {
+      mediaType: "text/plain";
+      text: string;
+    };
+
+export async function fetchProducts(
+  signal?: AbortSignal,
+): Promise<ApiEnvelope<ProductsPayload | null>> {
+  const raw = await getJson("/api/hathor/products", { signal });
+  const envelope = parseApiEnvelope(raw);
+  return envelope as ApiEnvelope<ProductsPayload | null>;
+}
